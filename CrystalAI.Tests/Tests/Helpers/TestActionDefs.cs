@@ -6,26 +6,28 @@
 // TestActionDefs.cs is part of Crystal AI.
 //  
 // Crystal AI is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+// it under the terms of the MIT License
+
+
 //  
 // Crystal AI is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with Crystal AI.  If not, see <http://www.gnu.org/licenses/>.
-namespace CrystalAI.TestHelpers {
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-  public static class TestActionDefs {
-    public static readonly string FailingAction = "FailingAction";
-    public static readonly string GenericFailingAction = "GenericFailingAction";
-    public static readonly string MockAction = "MockAction";
-    public static readonly string GenericMockAction = "GenericMockAction";
-    public static readonly string UpdatingAction = "UpdatingAction";
-    public static readonly string GenericUpdatingAction = "GenericUpdatingAction";
-  }
+// 
+
+
+namespace CrystalAI.TestHelpers
+{
+
+    public static class TestActionDefs
+    {
+        public static readonly string FailingAction = "FailingAction";
+        public static readonly string GenericFailingAction = "GenericFailingAction";
+        public static readonly string MockAction = "MockAction";
+        public static readonly string GenericMockAction = "GenericMockAction";
+        public static readonly string UpdatingAction = "UpdatingAction";
+        public static readonly string GenericUpdatingAction = "GenericUpdatingAction";
+    }
 
 }

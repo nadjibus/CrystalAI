@@ -6,145 +6,169 @@
 // AIComponents.cs is part of Crystal AI.
 //  
 // Crystal AI is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+// it under the terms of the MIT License
+
+
 //  
 // Crystal AI is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
 // 
-// You should have received a copy of the GNU General Public License
-// along with Crystal AI.  If not, see <http://www.gnu.org/licenses/>.
+
+
 using System.Collections.Generic;
 
 
-namespace Crystal.CollectionsTests {
+namespace Crystal.CollectionsTests
+{
 
-  public interface IActions {
-  }
-
-  public interface IConsiderations {
-  }
-
-  public interface ICompositeConsiderations {
-  }
-
-  public interface IOptions {
-  }
-
-  public interface IBehaviours {
-  }
-
-  public interface IUtilityAIs {
-  }
-
-
-  public class AiComponentCollection {
-    Dictionary<string, IAction> _actionsMap;
-    Dictionary<string, IConsideration> _considerationsMap;
-    Dictionary<string, IOption> _optionsMap;
-    Dictionary<string, IBehaviour> _behavioursMap;
-    Dictionary<string, IUtilityAi> _aiMap;
-
-    public AiComponentCollection() {
-      _actionsMap = new Dictionary<string, IAction>();
-      _considerationsMap = new Dictionary<string, IConsideration>();
-      _optionsMap = new Dictionary<string, IOption>();
-      _behavioursMap = new Dictionary<string, IBehaviour>();
-      _aiMap = new Dictionary<string, IUtilityAi>();
+    public interface IActions
+    {
     }
 
-    bool Add(IAction action) {
-      if(action == null)
-        return false;
-      if(_actionsMap.ContainsKey(action.NameId))
-        return false;
-
-      _actionsMap.Add(action.NameId, action);
-      return true;
+    public interface IConsiderations
+    {
     }
 
-    bool Add(IConsideration consideration) {
-      if(consideration == null)
-        return false;
-      if(_considerationsMap.ContainsKey(consideration.NameId))
-        return false;
-
-      _considerationsMap.Add(consideration.NameId, consideration);
-      return true;
+    public interface ICompositeConsiderations
+    {
     }
 
-    bool Add(IOption option) {
-      if(option == null)
-        return false;
-      if(_optionsMap.ContainsKey(option.NameId))
-        return false;
-
-      _optionsMap.Add(option.NameId, option);
-      return true;
+    public interface IOptions
+    {
     }
 
-    bool Add(IBehaviour behaviour) {
-      if(behaviour == null)
-        return false;
-      if(_behavioursMap.ContainsKey(behaviour.NameId))
-        return false;
-
-      _behavioursMap.Add(behaviour.NameId, behaviour);
-      return true;
+    public interface IBehaviours
+    {
     }
 
-    bool Add(IUtilityAi ai) {
-      if(ai == null)
-        return false;
-      if(_aiMap.ContainsKey(ai.NameId))
-        return false;
-
-      _aiMap.Add(ai.NameId, ai);
-      return true;
+    public interface IUtilityAIs
+    {
     }
 
-    IAction GetAction(string name) {
-      return null;
-    }
 
-    IConsideration GetConsideration(string name) {
-      return null;
-    }
+    public class AiComponentCollection
+    {
+        Dictionary<string, IAction> _actionsMap;
+        Dictionary<string, IConsideration> _considerationsMap;
+        Dictionary<string, IOption> _optionsMap;
+        Dictionary<string, IBehaviour> _behavioursMap;
+        Dictionary<string, IUtilityAi> _aiMap;
 
-    IOption GetOption(string name) {
-      return null;
-    }
+        public AiComponentCollection()
+        {
+            _actionsMap = new Dictionary<string, IAction>();
+            _considerationsMap = new Dictionary<string, IConsideration>();
+            _optionsMap = new Dictionary<string, IOption>();
+            _behavioursMap = new Dictionary<string, IBehaviour>();
+            _aiMap = new Dictionary<string, IUtilityAi>();
+        }
 
-    IBehaviour GetBehaviour(string name) {
-      return null;
-    }
+        bool Add(IAction action)
+        {
+            if (action == null)
+                return false;
+            if (_actionsMap.ContainsKey(action.NameId))
+                return false;
 
-    IUtilityAi GetAi(string name) {
-      return null;
-    }
+            _actionsMap.Add(action.NameId, action);
+            return true;
+        }
 
-    bool ContainsAction(string name) {
-      return _actionsMap.ContainsKey(name);
-    }
+        bool Add(IConsideration consideration)
+        {
+            if (consideration == null)
+                return false;
+            if (_considerationsMap.ContainsKey(consideration.NameId))
+                return false;
 
-    bool ContainsConsideration(string name) {
-      return _considerationsMap.ContainsKey(name);
-    }
+            _considerationsMap.Add(consideration.NameId, consideration);
+            return true;
+        }
 
-    bool ContainsOption(string name) {
-      return _optionsMap.ContainsKey(name);
-    }
+        bool Add(IOption option)
+        {
+            if (option == null)
+                return false;
+            if (_optionsMap.ContainsKey(option.NameId))
+                return false;
 
-    bool ContainsBehaviour(string name) {
-      return _behavioursMap.ContainsKey(name);
-    }
+            _optionsMap.Add(option.NameId, option);
+            return true;
+        }
 
-    bool ContainsAi(string name) {
-      return _aiMap.ContainsKey(name);
+        bool Add(IBehaviour behaviour)
+        {
+            if (behaviour == null)
+                return false;
+            if (_behavioursMap.ContainsKey(behaviour.NameId))
+                return false;
+
+            _behavioursMap.Add(behaviour.NameId, behaviour);
+            return true;
+        }
+
+        bool Add(IUtilityAi ai)
+        {
+            if (ai == null)
+                return false;
+            if (_aiMap.ContainsKey(ai.NameId))
+                return false;
+
+            _aiMap.Add(ai.NameId, ai);
+            return true;
+        }
+
+        IAction GetAction(string name)
+        {
+            return null;
+        }
+
+        IConsideration GetConsideration(string name)
+        {
+            return null;
+        }
+
+        IOption GetOption(string name)
+        {
+            return null;
+        }
+
+        IBehaviour GetBehaviour(string name)
+        {
+            return null;
+        }
+
+        IUtilityAi GetAi(string name)
+        {
+            return null;
+        }
+
+        bool ContainsAction(string name)
+        {
+            return _actionsMap.ContainsKey(name);
+        }
+
+        bool ContainsConsideration(string name)
+        {
+            return _considerationsMap.ContainsKey(name);
+        }
+
+        bool ContainsOption(string name)
+        {
+            return _optionsMap.ContainsKey(name);
+        }
+
+        bool ContainsBehaviour(string name)
+        {
+            return _behavioursMap.ContainsKey(name);
+        }
+
+        bool ContainsAi(string name)
+        {
+            return _aiMap.ContainsKey(name);
+        }
     }
-  }
 
 }

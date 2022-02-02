@@ -6,39 +6,46 @@
 // MockAction.cs is part of Crystal AI.
 //  
 // Crystal AI is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+// it under the terms of the MIT License
+
+
 //  
 // Crystal AI is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
 // 
-// You should have received a copy of the GNU General Public License
-// along with Crystal AI.  If not, see <http://www.gnu.org/licenses/>.
+
+
 using Crystal;
 
 
-namespace CrystalAI.TestHelpers {
+namespace CrystalAI.TestHelpers
+{
 
-  public class MockAction : ActionBase {
-    public override IAction Clone() {
-      return new MockAction(this);
-    }
+    public class MockAction : ActionBase
+    {
+        public override IAction Clone()
+        {
+            return new MockAction(this);
+        }
 
-    protected override void OnExecute(IContext context) {
-      EndInSuccess(context);
-    }
+        protected override void OnExecute(IContext context)
+        {
+            EndInSuccess(context);
+        }
 
-    public MockAction() {
-    }
+        public MockAction()
+        {
+        }
 
-    protected MockAction(MockAction other) : base(other) {
-    }
+        protected MockAction(MockAction other) : base(other)
+        {
+        }
 
-    public MockAction(string nameId, IActionCollection collection) : base(nameId, collection) {
+        public MockAction(string nameId, IActionCollection collection) : base(nameId, collection)
+        {
+        }
     }
-  }
 
 }

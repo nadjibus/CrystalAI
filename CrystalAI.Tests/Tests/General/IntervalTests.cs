@@ -6,26 +6,28 @@
 // IntervalTests.cs is part of Crystal AI.
 //  
 // Crystal AI is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+// it under the terms of the MIT License
+
+
 //  
 // Crystal AI is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
 // 
-// You should have received a copy of the GNU General Public License
-// along with Crystal AI.  If not, see <http://www.gnu.org/licenses/>.
+
+
 using System;
 using NUnit.Framework;
 
 
-namespace Crystal.GeneralTests {
+namespace Crystal.GeneralTests
+{
 
-  [TestFixture]
-  public class IntervalTests {
-    static readonly object[] ContainsTestCases = {
+    [TestFixture]
+    public class IntervalTests
+    {
+        static readonly object[] ContainsTestCases = {
       // Point interval constructor 
       new object[] {new Interval<float>(1f), 1f, true },
       new object[] {new Interval<double>(1.0), 1.0, true },
@@ -104,63 +106,69 @@ namespace Crystal.GeneralTests {
       new object[] {Interval.Create(10, 1), 11, false}
     };
 
-    static readonly object[] IntIntervalLengthCases = {
+        static readonly object[] IntIntervalLengthCases = {
       new object[] {10, 20, 10},
       new object[] {-10, 30, 40},
       new object[] {-10, -5, 5}
     };
 
-    static readonly object[] FloatIntervalLengthCases = {
+        static readonly object[] FloatIntervalLengthCases = {
       new object[] {1f, 2f, 1f},
       new object[] {-1f, 1f, 2f},
       new object[] {-1f, -0.5f, 0.5f}
     };
 
-    static readonly object[] DoubleIntervalLengthCases = {
+        static readonly object[] DoubleIntervalLengthCases = {
       new object[] {1.0, 2.0, 1.0},
       new object[] {-1.0, 1.0, 2.0},
       new object[] {-1.0, -0.5, 0.5}
     };
 
-    [Test, TestCaseSource("ContainsTestCases")]
-    public void ContainsTests<T>(Interval<T> interval, T point, bool expected) where T : struct, IComparable<T> {
-      Assert.That(interval.Contains(point), Is.EqualTo(expected));
-    }
+        [Test, TestCaseSource("ContainsTestCases")]
+        public void ContainsTests<T>(Interval<T> interval, T point, bool expected) where T : struct, IComparable<T>
+        {
+            Assert.That(interval.Contains(point), Is.EqualTo(expected));
+        }
 
-    [Test, TestCase(1f, 10f), TestCase(-1f, 20f), TestCase(200f, -100f),
-     TestCase(float.PositiveInfinity, float.NegativeInfinity), TestCase(float.NegativeInfinity, float.PositiveInfinity),
-     TestCase(-42.423f, float.PositiveInfinity), TestCase(float.NegativeInfinity, 34.4f), TestCase(1.0f, 1.0f),
-     TestCase(-1.0f, -1.0f)]
-    public void BoundsTests(float lowerBound, float upperBound) {
-      var interval = Interval.Create(lowerBound, upperBound);
-      float cLowerBound = Math.Min(lowerBound, upperBound);
-      float cUpperBound = Math.Max(lowerBound, upperBound);
-      Assert.That(interval.LowerBound, Is.EqualTo(cLowerBound));
-      Assert.That(interval.UpperBound, Is.EqualTo(cUpperBound));
-    }
+        [Test, TestCase(1f, 10f), TestCase(-1f, 20f), TestCase(200f, -100f),
+         TestCase(float.PositiveInfinity, float.NegativeInfinity), TestCase(float.NegativeInfinity, float.PositiveInfinity),
+         TestCase(-42.423f, float.PositiveInfinity), TestCase(float.NegativeInfinity, 34.4f), TestCase(1.0f, 1.0f),
+         TestCase(-1.0f, -1.0f)]
+        public void BoundsTests(float lowerBound, float upperBound)
+        {
+            var interval = Interval.Create(lowerBound, upperBound);
+            float cLowerBound = Math.Min(lowerBound, upperBound);
+            float cUpperBound = Math.Max(lowerBound, upperBound);
+            Assert.That(interval.LowerBound, Is.EqualTo(cLowerBound));
+            Assert.That(interval.UpperBound, Is.EqualTo(cUpperBound));
+        }
 
-    [Test]
-    public void ConstructorTest() {
-      var floatInterval = new Interval<float>(1.0f, 2.0f);
-    }
+        [Test]
+        public void ConstructorTest()
+        {
+            var floatInterval = new Interval<float>(1.0f, 2.0f);
+        }
 
-    [Test, TestCaseSource("IntIntervalLengthCases")]
-    public void IntIntervalLengthTests(int start, int end, int expected) {
-      var interval = new Interval<int>(start, end);
-      Assert.That(interval.Length(), Is.EqualTo(expected));
-    }
+        [Test, TestCaseSource("IntIntervalLengthCases")]
+        public void IntIntervalLengthTests(int start, int end, int expected)
+        {
+            var interval = new Interval<int>(start, end);
+            Assert.That(interval.Length(), Is.EqualTo(expected));
+        }
 
-    [Test, TestCaseSource("FloatIntervalLengthCases")]
-    public void FloatIntervalLengthTests(float start, float end, float expected) {
-      var interval = new Interval<float>(start, end);
-      Assert.That(interval.Length(), Is.EqualTo(expected));
-    }
+        [Test, TestCaseSource("FloatIntervalLengthCases")]
+        public void FloatIntervalLengthTests(float start, float end, float expected)
+        {
+            var interval = new Interval<float>(start, end);
+            Assert.That(interval.Length(), Is.EqualTo(expected));
+        }
 
-    [Test, TestCaseSource("DoubleIntervalLengthCases")]
-    public void DoubleIntervalLengthTests(double start, double end, double expected) {
-      var interval = new Interval<double>(start, end);
-      Assert.That(interval.Length(), Is.EqualTo(expected));
+        [Test, TestCaseSource("DoubleIntervalLengthCases")]
+        public void DoubleIntervalLengthTests(double start, double end, double expected)
+        {
+            var interval = new Interval<double>(start, end);
+            Assert.That(interval.Length(), Is.EqualTo(expected));
+        }
     }
-  }
 
 }

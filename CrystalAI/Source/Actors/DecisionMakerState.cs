@@ -1,4 +1,4 @@
-// GPL v3 License
+// MIT License
 // 
 // Copyright (c) 2016-2017 Bismur Studios Ltd.
 // Copyright (c) 2016-2017 Ioannis Giagkiozis
@@ -6,37 +6,39 @@
 // DecisionMakerState.cs is part of Crystal AI.
 //  
 // Crystal AI is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+// it under the terms of the MIT License
+
+
 //  
 // Crystal AI is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
 // 
-// You should have received a copy of the GNU General Public License
-// along with Crystal AI.  If not, see <http://www.gnu.org/licenses/>.
-namespace Crystal {
 
-  /// <summary>
-  ///   Represents the state of a <see cref="T:Crystal.DecisionMakerBase"/>
-  /// </summary>
-  public enum DecisionMakerState {
-    /// <summary>
-    ///   The associated AI is not running.
-    /// </summary>
-    Stopped,
+
+namespace Crystal
+{
 
     /// <summary>
-    ///   The associated AI is running.
+    ///   Represents the state of a <see cref="T:Crystal.DecisionMakerBase"/>
     /// </summary>
-    Running,
+    public enum DecisionMakerState
+    {
+        /// <summary>
+        ///   The associated AI is not running.
+        /// </summary>
+        Stopped,
 
-    /// <summary>
-    ///   The associated AI is paused.
-    /// </summary>
-    Paused
-  }
+        /// <summary>
+        ///   The associated AI is running.
+        /// </summary>
+        Running,
+
+        /// <summary>
+        ///   The associated AI is paused.
+        /// </summary>
+        Paused
+    }
 
 }

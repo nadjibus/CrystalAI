@@ -1,4 +1,4 @@
-﻿// GPL v3 License
+﻿// MIT License
 // 
 // Copyright (c) 2016-2017 Bismur Studios Ltd.
 // Copyright (c) 2016-2017 Ioannis Giagkiozis
@@ -6,144 +6,159 @@
 // DeferredCommand.cs is part of Crystal AI.
 //  
 // Crystal AI is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+// it under the terms of the MIT License
+
+
 //  
 // Crystal AI is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
 // 
-// You should have received a copy of the GNU General Public License
-// along with Crystal AI.  If not, see <http://www.gnu.org/licenses/>.
+
+
 using System;
 
 
-namespace Crystal {
-
-  /// <summary>
-  ///   This delegate is used for the process in DeferredCommand
-  /// </summary>
-  public delegate void CommandAction();
-
-  /// <summary>
-  ///   DeferredCommand is a command whose execution is delegated to a future time and/or executes
-  ///   repeatedly.
-  /// </summary>
-  public class DeferredCommand {
-
-    // This is by and far the most common use.
-    bool _isRepeating = true;
-    CommandAction _process;
-    long _timesExecuted;
-    float _lastExecutionTime;
-    float _lastUpdateDeltaTime;
-
+namespace Crystal
+{
 
     /// <summary>
-    ///   Gets or sets a value indicating whether this instance is repeating.
+    ///   This delegate is used for the process in DeferredCommand
     /// </summary>
-    /// <value><c>true</c> if this instance is repeating; otherwise, <c>false</c>.</value>
-    public bool IsRepeating {
-      get { return _isRepeating; }
-      set { _isRepeating = value; }
-    }
-
-    Interval<float> _initExecutionDelayInterval = Interval.Create(0f);
+    public delegate void CommandAction();
 
     /// <summary>
-    /// The initial execution delay interval in seconds. If this is a point interval (e.g. [a,a]) the delay
-    /// is deterministic, i.e. always equal to the given point.
+    ///   DeferredCommand is a command whose execution is delegated to a future time and/or executes
+    ///   repeatedly.
     /// </summary>
-    public Interval<float> InitExecutionDelayInterval {
-      get { return _initExecutionDelayInterval; }
-      set { _initExecutionDelayInterval = value.ClampToPositive(); }
-    }
+    public class DeferredCommand
+    {
 
-    // The default execution delay is ~16 milliseconds, i.e. the period of a frame in a game running at 60 fps.
-    Interval<float> _executionDelayInterval = Interval.Create(0.0167f);
-    /// <summary>
-    /// The execution delay interval in seconds. If this is a point interval (e.g. [a,a]) the delay
-    /// is deterministic, i.e. always equal to the given point.
-    /// </summary>
-    public Interval<float> ExecutionDelayInterval {
-      get { return _executionDelayInterval; }
-      set { _executionDelayInterval = value.ClampToPositive(); }
-    }
+        // This is by and far the most common use.
+        bool _isRepeating = true;
+        CommandAction _process;
+        long _timesExecuted;
+        float _lastExecutionTime;
+        float _lastUpdateDeltaTime;
 
-    /// <summary>
-    ///   This determines how much Time to wait (in seconds), before executing the scheduled item
-    ///   for the first Time. This is ignored after the first execution
-    /// </summary>
-    /// <value>The first execution delay.</value>
-    public float InitExecutionDelay {
-      get { return PcgExtended.Default.NextFloat(_initExecutionDelayInterval); }
-    }
 
-    /// <summary>
-    ///   The Time to wait in seconds to execute again the scheduled item.
-    /// </summary>
-    /// <value>The next execution delay.</value>
-    public float ExecutionDelay {
-      get { return PcgExtended.Default.NextFloat(_executionDelayInterval); }
-    }
+        /// <summary>
+        ///   Gets or sets a value indicating whether this instance is repeating.
+        /// </summary>
+        /// <value><c>true</c> if this instance is repeating; otherwise, <c>false</c>.</value>
+        public bool IsRepeating
+        {
+            get { return _isRepeating; }
+            set { _isRepeating = value; }
+        }
 
-    /// <summary>
-    ///   The number of times the Execute() command was called.
-    /// </summary>
-    public long TimesExecuted {
-      get { return _timesExecuted; }
-    }
+        Interval<float> _initExecutionDelayInterval = Interval.Create(0f);
 
-    /// <summary>
-    ///   The time of the last execution in seconds since the start of the application.
-    /// </summary>
-    public float LastExecution {
-      get { return _lastExecutionTime; }
-    }
+        /// <summary>
+        /// The initial execution delay interval in seconds. If this is a point interval (e.g. [a,a]) the delay
+        /// is deterministic, i.e. always equal to the given point.
+        /// </summary>
+        public Interval<float> InitExecutionDelayInterval
+        {
+            get { return _initExecutionDelayInterval; }
+            set { _initExecutionDelayInterval = value.ClampToPositive(); }
+        }
 
-    /// <summary>
-    ///   The time since the last update in seconds.
-    /// </summary>
-    public float TimeSinceLastUpdate {
-      get { return CrTime.TotalSeconds - _lastExecutionTime; }
-    }
+        // The default execution delay is ~16 milliseconds, i.e. the period of a frame in a game running at 60 fps.
+        Interval<float> _executionDelayInterval = Interval.Create(0.0167f);
+        /// <summary>
+        /// The execution delay interval in seconds. If this is a point interval (e.g. [a,a]) the delay
+        /// is deterministic, i.e. always equal to the given point.
+        /// </summary>
+        public Interval<float> ExecutionDelayInterval
+        {
+            get { return _executionDelayInterval; }
+            set { _executionDelayInterval = value.ClampToPositive(); }
+        }
 
-    /// <summary>
-    ///   This returns the time difference in seconds between the last update time and the second to
-    ///   last update time.
-    /// </summary>
-    public float LastUpdateDeltaTime {
-      get { return _lastUpdateDeltaTime; }
-    }
+        /// <summary>
+        ///   This determines how much Time to wait (in seconds), before executing the scheduled item
+        ///   for the first Time. This is ignored after the first execution
+        /// </summary>
+        /// <value>The first execution delay.</value>
+        public float InitExecutionDelay
+        {
+            get { return PcgExtended.Default.NextFloat(_initExecutionDelayInterval); }
+        }
 
-    /// <summary>
-    /// Executes this command.
-    /// </summary>
-    public void Execute() {
-      _process();
-      var lastExecOld = _lastExecutionTime;
-      _lastExecutionTime = CrTime.TotalSeconds;
-      _lastUpdateDeltaTime = _lastExecutionTime - lastExecOld;
-      unchecked {
-        _timesExecuted++;
-      }
-    }
+        /// <summary>
+        ///   The Time to wait in seconds to execute again the scheduled item.
+        /// </summary>
+        /// <value>The next execution delay.</value>
+        public float ExecutionDelay
+        {
+            get { return PcgExtended.Default.NextFloat(_executionDelayInterval); }
+        }
 
-    /// <summary>
-    ///   Initializes a new instance of the <see cref="T:Crystal.DeferredCommand"/> class.
-    /// </summary>
-    /// <param name="process">Process.</param>
-    public DeferredCommand(CommandAction process) {
-      if(process == null)
-        throw new ProcessNullException();
+        /// <summary>
+        ///   The number of times the Execute() command was called.
+        /// </summary>
+        public long TimesExecuted
+        {
+            get { return _timesExecuted; }
+        }
 
-      _process = process;
-    }
+        /// <summary>
+        ///   The time of the last execution in seconds since the start of the application.
+        /// </summary>
+        public float LastExecution
+        {
+            get { return _lastExecutionTime; }
+        }
 
-    internal class ProcessNullException : Exception {
+        /// <summary>
+        ///   The time since the last update in seconds.
+        /// </summary>
+        public float TimeSinceLastUpdate
+        {
+            get { return CrTime.TotalSeconds - _lastExecutionTime; }
+        }
+
+        /// <summary>
+        ///   This returns the time difference in seconds between the last update time and the second to
+        ///   last update time.
+        /// </summary>
+        public float LastUpdateDeltaTime
+        {
+            get { return _lastUpdateDeltaTime; }
+        }
+
+        /// <summary>
+        /// Executes this command.
+        /// </summary>
+        public void Execute()
+        {
+            _process();
+            var lastExecOld = _lastExecutionTime;
+            _lastExecutionTime = CrTime.TotalSeconds;
+            _lastUpdateDeltaTime = _lastExecutionTime - lastExecOld;
+            unchecked
+            {
+                _timesExecuted++;
+            }
+        }
+
+        /// <summary>
+        ///   Initializes a new instance of the <see cref="T:Crystal.DeferredCommand"/> class.
+        /// </summary>
+        /// <param name="process">Process.</param>
+        public DeferredCommand(CommandAction process)
+        {
+            if (process == null)
+                throw new ProcessNullException();
+
+            _process = process;
+        }
+
+        internal class ProcessNullException : Exception
+        {
+        }
     }
-  }
 
 }

@@ -6,57 +6,63 @@
 // DeferredCommandTests.cs is part of Crystal AI.
 //  
 // Crystal AI is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+// it under the terms of the MIT License
+
+
 //  
 // Crystal AI is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
 // 
-// You should have received a copy of the GNU General Public License
-// along with Crystal AI.  If not, see <http://www.gnu.org/licenses/>.
+
+
 using NUnit.Framework;
 
 
-namespace Crystal.SchedulingTests {
+namespace Crystal.SchedulingTests
+{
 
-  [TestFixture]
-  internal class DeferredCommandTests {
-    [Test]
-    public void ConstructorTest() {
-      CommandAction ca = () => { };
-      var dc = new DeferredCommand(ca);
-      Assert.IsNotNull(dc);
+    [TestFixture]
+    internal class DeferredCommandTests
+    {
+        [Test]
+        public void ConstructorTest()
+        {
+            CommandAction ca = () => { };
+            var dc = new DeferredCommand(ca);
+            Assert.IsNotNull(dc);
+        }
+
+        [Test]
+        public void NullProcessThrowsTest()
+        {
+            Assert.Throws<DeferredCommand.ProcessNullException>(() => new DeferredCommand(null));
+        }
+
+        [Test]
+        public void RepeatingTest()
+        {
+            CommandAction ca = () => { };
+            var dc = new DeferredCommand(ca);
+            Assert.That(dc.IsRepeating, Is.True);
+            dc.IsRepeating = false;
+            Assert.That(dc.IsRepeating, Is.False);
+        }
+
+        [Test]
+        public void GetSetFirstExecutionDelayMinTest()
+        {
+            CommandAction ca = () => { };
+            var dc = new DeferredCommand(ca);
+            Assert.That(dc.InitExecutionDelayInterval.LowerBound, Is.EqualTo(0f));
+
+            dc.InitExecutionDelayInterval = dc.InitExecutionDelayInterval.ChangeLowerBound(0.5f);
+            Assert.That(dc.InitExecutionDelayInterval.LowerBound, Is.EqualTo(0.5f));
+
+            dc.InitExecutionDelayInterval = dc.InitExecutionDelayInterval.ChangeLowerBound(-1f);
+            Assert.That(dc.InitExecutionDelayInterval.LowerBound, Is.EqualTo(0f));
+        }
     }
-
-    [Test]
-    public void NullProcessThrowsTest() {
-      Assert.Throws<DeferredCommand.ProcessNullException>(() => new DeferredCommand(null));
-    }
-
-    [Test]
-    public void RepeatingTest() {
-      CommandAction ca = () => { };
-      var dc = new DeferredCommand(ca);
-      Assert.That(dc.IsRepeating, Is.True);
-      dc.IsRepeating = false;
-      Assert.That(dc.IsRepeating, Is.False);
-    }
-
-    [Test]
-    public void GetSetFirstExecutionDelayMinTest() {
-      CommandAction ca = () => { };
-      var dc = new DeferredCommand(ca);
-      Assert.That(dc.InitExecutionDelayInterval.LowerBound, Is.EqualTo(0f));
-
-      dc.InitExecutionDelayInterval = dc.InitExecutionDelayInterval.ChangeLowerBound(0.5f);
-      Assert.That(dc.InitExecutionDelayInterval.LowerBound, Is.EqualTo(0.5f));
-      
-      dc.InitExecutionDelayInterval = dc.InitExecutionDelayInterval.ChangeLowerBound(-1f);
-      Assert.That(dc.InitExecutionDelayInterval.LowerBound, Is.EqualTo(0f));
-    }
-  }
 
 }
