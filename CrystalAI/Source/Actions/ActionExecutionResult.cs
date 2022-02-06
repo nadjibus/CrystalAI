@@ -21,9 +21,9 @@ namespace Crystal
 {
 
     /// <summary>
-    ///   AI Action execution status.
+    ///   AI Action execution result.
     /// </summary>
-    public enum ActionStatus
+    public enum ActionExecutionResult
     {
         /// <summary>
         ///   AI Action failed to execute.

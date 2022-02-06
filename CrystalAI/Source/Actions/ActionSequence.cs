@@ -31,7 +31,7 @@ namespace Crystal
     public sealed class ActionSequence : ActionBase
     {
         List<IAction> _actions = new List<IAction>(2);
-        Dictionary<int, ActionStatus> _actionStatusMap = new Dictionary<int, ActionStatus>();
+        Dictionary<int, ActionExecutionResult> _actionStatusMap = new Dictionary<int, ActionExecutionResult>();
 
         /// <summary>
         ///   Returns the sequence of actions executed when this sequence is selected.
@@ -39,19 +39,6 @@ namespace Crystal
         public IList<IAction> Actions
         {
             get { return _actions; }
-        }
-
-        /// <summary>
-        /// Creates a new instance of the implementing class. Note that the semantics here
-        /// are somewhat vague, however, by convention the "Prototype Pattern" uses a "Clone"
-        /// function. Note that this may have very different semantics when compared with either
-        /// shallow or deep cloning. When implementing this remember to include only the defining
-        /// characteristics of the class and not its state!
-        /// </summary>
-        /// <returns></returns>
-        public override IAction Clone()
-        {
-            return new ActionSequence(this);
         }
 
         /// <summary>
@@ -64,7 +51,7 @@ namespace Crystal
             for (int i = 0; i < count; i++)
             {
                 _actions[i].Execute(context);
-                UpdateStatusMap(i);
+                UpdateStatusMap(i, context);
             }
 
             ResolveActionStatusesThenEnd(context);
@@ -79,11 +66,11 @@ namespace Crystal
             int count = _actions.Count;
             for (int i = 0; i < count; i++)
             {
-                if (_actionStatusMap[i] != ActionStatus.Running)
+                if (_actionStatusMap[i] != ActionExecutionResult.Running)
                     continue;
 
                 _actions[i].Execute(context);
-                UpdateStatusMap(i);
+                UpdateStatusMap(i, context);
             }
 
             ResolveActionStatusesThenEnd(context);
@@ -99,40 +86,23 @@ namespace Crystal
         /// <summary>
         /// Initializes a new instance of the <see cref="ActionSequence"/> class.
         /// </summary>
-        /// <param name="other">The other.</param>
-        ActionSequence(ActionSequence other) : base(other)
-        {
-            _actions = new List<IAction>();
-            _actionStatusMap = new Dictionary<int, ActionStatus>();
-
-            for (int i = 0; i < other._actions.Count; i++)
-            {
-                var n = other._actions[i].Clone();
-                _actions.Add(n);
-                _actionStatusMap.Add(i, n.ActionStatus);
-            }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ActionSequence"/> class.
-        /// </summary>
         /// <param name="nameId">The name identifier.</param>
         /// <param name="collection">The collection.</param>
         public ActionSequence(string nameId, IActionCollection collection) : base(nameId, collection)
         {
         }
 
-        void UpdateStatusMap(int idx)
+        void UpdateStatusMap(int idx, IContext context)
         {
-            _actionStatusMap[idx] = _actions[idx].ActionStatus;
+            _actionStatusMap[idx] = context.CurrentActionState.ExecutionResult;
         }
 
         void ResolveActionStatusesThenEnd(IContext context)
         {
-            if (_actionStatusMap.ContainsValue(ActionStatus.Running))
+            if (_actionStatusMap.ContainsValue(ActionExecutionResult.Running))
                 return;
 
-            if (_actionStatusMap.Values.All(s => s == ActionStatus.Success))
+            if (_actionStatusMap.Values.All(s => s == ActionExecutionResult.Success))
                 EndInSuccess(context);
             else
                 EndInFailure(context);

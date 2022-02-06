@@ -22,18 +22,19 @@ using System.Diagnostics;
 
 namespace Crystal
 {
-
     /// <summary>
     /// Clock.
     /// </summary>
-    public static class CrTime
+    public class CrTime : ITimeProvider
     {
-        static readonly Stopwatch Clock;
+        public static ITimeProvider Instance { get; } = new CrTime();
+
+        private readonly Stopwatch Clock;
 
         /// <summary>
         ///   The time in seconds since the start of the game.
         /// </summary>
-        public static float TotalSeconds
+        public float TotalSeconds
         {
             get { return (float)Clock.Elapsed.TotalSeconds; }
         }
@@ -44,7 +45,7 @@ namespace Crystal
         /// <value>
         /// The milliseconds.
         /// </value>
-        public static float TotalMilliseconds
+        public float TotalMilliseconds
         {
             get { return (float)Clock.Elapsed.TotalMilliseconds; }
         }
@@ -52,7 +53,7 @@ namespace Crystal
         /// <summary>
         /// Initializes the <see cref="CrTime"/> class.
         /// </summary>
-        static CrTime()
+        private CrTime()
         {
             Clock = new Stopwatch();
             Clock.Start();

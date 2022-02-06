@@ -28,11 +28,6 @@ namespace Crystal.GeneralTests
         public string Message { get; set; }
         public int Counter { get; set; }
 
-        public override IAction Clone()
-        {
-            return new MockAction(this);
-        }
-
         protected override void OnExecute(MockContext context)
         {
             Console.WriteLine(Message + " {0}", Counter);

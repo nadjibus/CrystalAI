@@ -31,7 +31,7 @@ namespace Crystal.ActionTests
         MockContext _context;
         HelperAiConstructor _aiConstructor;
 
-        [OneTimeSetUp]
+        [SetUp]
         public void Initialize()
         {
             _context = new MockContext();
@@ -43,7 +43,7 @@ namespace Crystal.ActionTests
         {
             var a = new ActionBase<MockContext>();
             Assert.IsNotNull(a);
-            Assert.That(a.ActionStatus == ActionStatus.Idle);
+            Assert.AreEqual(ActionExecutionResult.Idle, _context.CurrentActionState.ExecutionResult);
         }
 
         [Test]
@@ -71,46 +71,34 @@ namespace Crystal.ActionTests
         }
 
         [Test]
-        public void CloneTest()
-        {
-            _aiConstructor.AIs.ClearAll();
-            var a = new ActionBase<MockContext>("name", _aiConstructor.Actions);
-            a.Execute(_context);
-            var ac = a.Clone();
-            Assert.That(ac.NameId, Is.EqualTo(a.NameId));
-            Assert.That(a.ActionStatus == ActionStatus.Success);
-            Assert.That(ac.ActionStatus == ActionStatus.Idle);
-        }
-
-        [Test]
         public void ExecuteTest()
         {
             var a = new ActionBase<MockContext>();
-            Assert.That(a.ActionStatus == ActionStatus.Idle);
+            Assert.That(_context.CurrentActionState.ExecutionResult == ActionExecutionResult.Idle);
             Assert.DoesNotThrow(() => a.Execute(_context));
-            Assert.That(a.ActionStatus == ActionStatus.Success);
+            Assert.That(_context.CurrentActionState.ExecutionResult == ActionExecutionResult.Success);
         }
 
         [Test]
         public void ExecuteAsIActionTest()
         {
             var a = new ActionBase<MockContext>() as IAction;
-            Assert.That(a.ActionStatus == ActionStatus.Idle);
+            Assert.That(_context.CurrentActionState.ExecutionResult == ActionExecutionResult.Idle);
             Assert.DoesNotThrow(() => a.Execute(_context));
-            Assert.That(a.ActionStatus == ActionStatus.Success);
+            Assert.That(_context.CurrentActionState.ExecutionResult == ActionExecutionResult.Success);
         }
 
         [Test]
         public void CooldownTest()
         {
             var a = new ActionBase<MockContext>();
-            a.Cooldown = 20f;
-            Assert.That(a.InCooldown, Is.False);
+            a.CooldownTime = 20f;
+            Assert.That(a.InCooldown(_context), Is.False);
             a.Execute(_context);
-            Assert.That(a.ActionStatus == ActionStatus.Success);
-            Assert.That(a.InCooldown, Is.True);
+            Assert.That(_context.CurrentActionState.ExecutionResult == ActionExecutionResult.Success);
+            Assert.That(a.InCooldown(_context), Is.True);
             a.Execute(_context);
-            Assert.That(a.ActionStatus == ActionStatus.Failure);
+            Assert.That(_context.CurrentActionState.ExecutionResult == ActionExecutionResult.Failure);
         }
     }
 

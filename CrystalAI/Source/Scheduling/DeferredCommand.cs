@@ -38,6 +38,7 @@ namespace Crystal
         // This is by and far the most common use.
         bool _isRepeating = true;
         CommandAction _process;
+        private readonly ITimeProvider _timeProvider;
         long _timesExecuted;
         float _lastExecutionTime;
         float _lastUpdateDeltaTime;
@@ -117,7 +118,7 @@ namespace Crystal
         /// </summary>
         public float TimeSinceLastUpdate
         {
-            get { return CrTime.TotalSeconds - _lastExecutionTime; }
+            get { return _timeProvider.TotalSeconds - _lastExecutionTime; }
         }
 
         /// <summary>
@@ -136,7 +137,7 @@ namespace Crystal
         {
             _process();
             var lastExecOld = _lastExecutionTime;
-            _lastExecutionTime = CrTime.TotalSeconds;
+            _lastExecutionTime = _timeProvider.TotalSeconds;
             _lastUpdateDeltaTime = _lastExecutionTime - lastExecOld;
             unchecked
             {
@@ -148,12 +149,13 @@ namespace Crystal
         ///   Initializes a new instance of the <see cref="T:Crystal.DeferredCommand"/> class.
         /// </summary>
         /// <param name="process">Process.</param>
-        public DeferredCommand(CommandAction process)
+        public DeferredCommand(CommandAction process, ITimeProvider timeProvider = null)
         {
             if (process == null)
                 throw new ProcessNullException();
 
             _process = process;
+            _timeProvider = timeProvider ?? CrTime.Instance;
         }
 
         internal class ProcessNullException : Exception

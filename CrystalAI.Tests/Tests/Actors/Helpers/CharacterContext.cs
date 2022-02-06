@@ -45,6 +45,13 @@ namespace Crystal.ActorTests
             get { return _bladder; }
             set { _bladder = value.Clamp01(); }
         }
+
+        public ActionState CurrentActionState { get; }
+
+        public CharacterContext()
+        {
+            CurrentActionState = new ActionState();
+        }
     }
 
 }

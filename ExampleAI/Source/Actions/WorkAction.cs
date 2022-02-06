@@ -29,11 +29,6 @@ namespace ExampleAI
         float dWealth = 20f;
         float accumulatedWealth;
         float maxWealthPerSession = 100f;
-        public override IAction Clone()
-        {
-            return new WorkAction(this);
-        }
-
         protected override void OnExecute(CharacterContext context)
         {
             context.Character.Report(Name);

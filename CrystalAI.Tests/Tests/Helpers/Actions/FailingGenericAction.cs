@@ -25,11 +25,6 @@ namespace CrystalAI.TestHelpers
 
     public class FailingGenericAction : ActionBase<CustomContext>
     {
-        public override IAction Clone()
-        {
-            return new FailingGenericAction(this);
-        }
-
         protected override void OnExecute(CustomContext context)
         {
             EndInFailure(context);

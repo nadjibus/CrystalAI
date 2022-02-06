@@ -25,21 +25,12 @@ namespace CrystalAI.TestHelpers
 
     public class FailingAction : ActionBase
     {
-        public override IAction Clone()
-        {
-            return new FailingAction(this);
-        }
-
         protected override void OnExecute(IContext context)
         {
             EndInFailure(context);
         }
 
         public FailingAction()
-        {
-        }
-
-        FailingAction(FailingAction other) : base(other)
         {
         }
 

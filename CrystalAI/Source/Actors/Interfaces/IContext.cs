@@ -26,6 +26,7 @@ namespace Crystal
     /// </summary>
     public interface IContext
     {
+        ActionState CurrentActionState { get; }
     }
 
 }

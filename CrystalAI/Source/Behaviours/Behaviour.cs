@@ -107,19 +107,6 @@ namespace Crystal
         }
 
         /// <summary>
-        /// Creates a new instance of the implementing class. Note that the semantics here
-        /// are somewhat vague, however, by convention the "Prototype Pattern" uses a "Clone"
-        /// function. Note that this may have very different semantics when compared with either
-        /// shallow or deep cloning. When implementing this remember to include only the defining
-        /// characteristics of the class and not its state!
-        /// </summary>
-        /// <returns></returns>
-        public override IConsideration Clone()
-        {
-            return new Behaviour(this);
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Behaviour"/> class.
         /// </summary>
         public Behaviour()
@@ -135,12 +122,12 @@ namespace Crystal
         {
             CreateLists();
             _collection = other._collection;
-            _selector = other.Selector.Clone();
-            Measure = other.Measure.Clone();
+            _selector = other.Selector;
+            Measure = other.Measure;
 
             for (int i = 0; i < other._options.Count; i++)
             {
-                var o = other._options[i].Clone() as IOption;
+                var o = other._options[i];
                 _options.Add(o);
                 _optionUtilities.Add(o.Utility);
             }

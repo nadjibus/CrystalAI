@@ -97,7 +97,7 @@ namespace Crystal
         /// <returns></returns>
         public IBehaviour Create(string behaviourId)
         {
-            return _behavioursMap.ContainsKey(behaviourId) ? _behavioursMap[behaviourId].Clone() as IBehaviour : null;
+            return _behavioursMap.ContainsKey(behaviourId) ? _behavioursMap[behaviourId] : null;
         }
 
         /// <summary>

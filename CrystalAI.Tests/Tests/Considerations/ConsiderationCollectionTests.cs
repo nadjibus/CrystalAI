@@ -56,7 +56,6 @@ namespace Crystal.ConsiderationTests
             collection.Add(consideration);
             var newConsideration = collection.Create("some");
             Assert.AreEqual(consideration.NameId, newConsideration.NameId);
-            Assert.AreNotEqual(consideration, newConsideration);
         }
 
         [Test]

@@ -82,7 +82,7 @@ namespace Crystal
         /// </returns>
         public IAction Create(string actionId)
         {
-            return _actionsMap.ContainsKey(actionId) ? _actionsMap[actionId].Clone() : null;
+            return _actionsMap.ContainsKey(actionId) ? _actionsMap[actionId] : null;
         }
 
         /// <summary>

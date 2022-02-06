@@ -59,7 +59,6 @@ namespace Crystal.OptionTests
             _options.Add(option);
             var newOption = _options.Create("some");
             Assert.AreEqual(option.NameId, newOption.NameId);
-            Assert.AreNotEqual(option, newOption);
         }
 
         [Test]

@@ -33,30 +33,13 @@ namespace Crystal
         string NameId { get; }
 
         /// <summary>
-        ///   The Time that this action has been running for since it has been started in seconds. 
-        /// </summary>
-        float ElapsedTime { get; }
-
-        /// <summary>
         ///   The required cool-down time, in seconds, needed before this action executes again.
         /// </summary>
-        float Cooldown { get; set; }
+        float CooldownTime { get; set; }
 
-        /// <summary>
-        ///   This returns true if the cool-down time for this action has not yet elapsed.
-        /// </summary>
-        bool InCooldown { get; }
-
-        /// <summary>
-        ///   Gets the action status.
-        /// </summary>
-        ActionStatus ActionStatus { get; }
-
-        /// <summary>
-        ///   Executes the AI Action.
-        /// </summary>
-        /// <param name="context">AI Context.</param>
         void Execute(IContext context);
+
+        bool InCooldown(IContext context);
     }
 
 }

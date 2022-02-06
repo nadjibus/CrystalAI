@@ -110,58 +110,6 @@ namespace Crystal.OptionTests
             Assert.That(o.SetAction((string)null), Is.False);
         }
 
-        [Test]
-        public void ClonedOptionHasPreviousActionTest()
-        {
-            _aiConstructor.AIs.ClearAll();
-            SetupActionsAndConsiderations();
-            var o = new Option("o1", _aiConstructor.Options);
-            o.SetAction("a1");
-            var oc = o.Clone() as IOption;
-            Assert.IsNotNull(oc);
-            Assert.That(oc.Action.NameId == o.Action.NameId);
-        }
-
-        [Test]
-        public void ClonedOptionHasAllPreviousConsiderationsTest()
-        {
-            _aiConstructor.AIs.ClearAll();
-            SetupActionsAndConsiderations();
-            var o = new Option("o1", _aiConstructor.Options);
-            o.AddConsideration("c1");
-            o.AddConsideration("c2");
-            o.AddConsideration("c3");
-            o.AddConsideration("c4");
-            var oc = o.Clone() as IOption;
-            Assert.IsNotNull(oc);
-            Assert.That(oc.AddConsideration("c1"), Is.False);
-            Assert.That(oc.AddConsideration("c2"), Is.False);
-            Assert.That(oc.AddConsideration("c3"), Is.False);
-            Assert.That(oc.AddConsideration("c4"), Is.False);
-            Assert.That(oc.AddConsideration("c5"), Is.True);
-        }
-
-        [Test]
-        public void EnsureClonedOptionHasResultsInSameUtilityTest([Range(0.0f, 10.0f, 1f)] float util)
-        {
-            _aiConstructor.AIs.ClearAll();
-            SetupActionsAndConsiderations();
-            var context = new OptionContext();
-            var o = new Option("o1", _aiConstructor.Options);
-            Assert.IsNotNull(o);
-            Assert.That(o.SetAction("a1"), Is.True);
-            o.AddConsideration("c1");
-            var oc = o.Clone() as IOption;
-            Assert.IsNotNull(oc);
-
-            context.XVal1 = util;
-            o.Consider(context);
-            oc.Consider(context);
-            Assert.AreEqual(o.Utility.Value, oc.Utility.Value);
-            Assert.AreEqual(o.Utility.Weight, oc.Utility.Weight);
-            Console.WriteLine("{0}", o.Utility.Value);
-        }
-
         void SetupActionsAndConsiderations()
         {
             _aiConstructor.AIs.ClearAll();

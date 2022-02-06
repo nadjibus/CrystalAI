@@ -62,7 +62,6 @@ namespace Crystal.BehaviourTests
             _behaviours.Add(behaviour);
             var newOption = _behaviours.Create("some");
             Assert.AreEqual(behaviour.NameId, newOption.NameId);
-            Assert.AreNotEqual(behaviour, newOption);
         }
 
         [Test]

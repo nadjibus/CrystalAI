@@ -22,7 +22,14 @@ namespace Crystal.GeneralTests
 
     public class MockContext : IContext
     {
+        public MockContext()
+        {
+            CurrentActionState = new ActionState();
+        }
+
         public float Val;
+
+        public ActionState CurrentActionState { get; }
     }
 
 }

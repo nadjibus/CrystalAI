@@ -27,10 +27,6 @@ namespace ExampleAI
     {
         public static readonly string Name = "Exercise";
         float dFit;
-        public override IAction Clone()
-        {
-            return new PhysicalExerciseAction(this);
-        }
 
         protected override void OnExecute(CharacterContext context)
         {

@@ -41,7 +41,10 @@ namespace Crystal.ActorTests
         protected override void OnUpdate(CharacterContext context)
         {
             Console.WriteLine("+++ DrinkAction update...");
-            if (ElapsedTime > 5f)
+
+            var elapsedTime = CrTime.Instance.TotalSeconds - context.CurrentActionState.StartedAt;
+
+            if (elapsedTime > 5f)
             {
                 Console.WriteLine("+=+=+=+=+ END Drink +=+=+=+=+");
                 EndInSuccess(context);

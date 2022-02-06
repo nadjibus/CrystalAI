@@ -107,7 +107,7 @@ namespace Crystal
         /// <returns></returns>
         public IOption Create(string optionId)
         {
-            return _optionsMap.ContainsKey(optionId) ? _optionsMap[optionId].Clone() as IOption : null;
+            return _optionsMap.ContainsKey(optionId) ? _optionsMap[optionId] : null;
         }
 
         /// <summary>

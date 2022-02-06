@@ -38,6 +38,7 @@ namespace Crystal
         QueuedCommand _nextCommand;
         int _processedCommandsCounter;
         Stopwatch _watch;
+        private readonly ITimeProvider _timeProvider;
 
         /// <summary>
         ///   The maximum Time in milliseconds the Process() is allowed to take.
@@ -80,8 +81,8 @@ namespace Crystal
         /// <returns></returns>
         public IDeferredCommandHandle Add(DeferredCommand cmd)
         {
-            float time = CrTime.TotalSeconds;
-            var scheduledCommand = new QueuedCommand(this)
+            float time = _timeProvider.TotalSeconds;
+            var scheduledCommand = new QueuedCommand(this, _timeProvider)
             {
                 Command = cmd,
                 LastExecution = time,
@@ -119,11 +120,13 @@ namespace Crystal
         ///   Initializes a new instance of the <see cref="T:Crystal.CommandStream"/> class.
         /// </summary>
         /// <param name="initialQueueSize">Initial queue size.</param>
-        public CommandStream(int initialQueueSize)
+        public CommandStream(int initialQueueSize, ITimeProvider timeProvider = null)
         {
             _watch = new Stopwatch();
+            _timeProvider = timeProvider ?? CrTime.Instance;
             var comparer = new QueuedCommandComparer();
             Queue = new PriorityQueue<QueuedCommand>(initialQueueSize, comparer);
+            
         }
 
         void ResetVariables()
@@ -140,7 +143,7 @@ namespace Crystal
         {
             _watch.Reset();
             _watch.Start();
-            _frameBeginTime = CrTime.TotalSeconds;
+            _frameBeginTime = _timeProvider.TotalSeconds;
         }
 
         bool CanGetNextCommand()

@@ -27,10 +27,6 @@ namespace Crystal.ActorTests
             Utility = new Utility(1.0f, 1.0f);
         }
 
-        public override IConsideration Clone()
-        {
-            return new RecursiveOption(this);
-        }
 
         //    IUtilityAi _ai;
 
@@ -38,10 +34,6 @@ namespace Crystal.ActorTests
         //      _ai = ai;
         //      SetAction(new AITransition(ai));
         //    }
-
-        RecursiveOption(RecursiveOption other) : base(other)
-        {
-        }
 
         public RecursiveOption(string nameId, IOptionCollection collection) : base(nameId, collection)
         {

@@ -126,60 +126,6 @@ namespace Crystal.ConsiderationTests
             Assert.That(c.AddConsideration("b1") == false);
         }
 
-        [Test]
-        public void CloneHasSameNameIdTest()
-        {
-            _considerations.Clear();
-            var c = ConsiderationConstructor.Chebyshev("name", _considerations);
-            var cc = c.Clone();
-            Assert.That(c.NameId == cc.NameId);
-        }
-
-        [Test]
-        public void CloneHasCollectionTest()
-        {
-            _considerations.Clear();
-            var c = ConsiderationConstructor.Chebyshev("name", _considerations);
-            var cc = c.Clone() as ICompositeConsideration;
-            var b1 = new BasicConsideration("b1", _considerations);
-            Assert.That(c.AddConsideration("b1"));
-            Assert.That(cc.AddConsideration("b1"));
-        }
-
-        [Test]
-        public void EnsureCloneHasConsiderationsTest()
-        {
-            _considerations.Clear();
-            var c = ConsiderationConstructor.Chebyshev("name", _considerations);
-            var b1 = new BasicConsideration("b1", _considerations);
-            var b2 = new BasicConsideration("b2", _considerations);
-            c.AddConsideration("b1");
-            c.AddConsideration("b2");
-            var cc = c.Clone() as ICompositeConsideration;
-
-            Assert.That(cc.AddConsideration("b1") == false);
-            Assert.That(cc.AddConsideration("b2") == false);
-        }
-
-        [Test]
-        public void CloneProducesSameUtilityTest([Range(0.0f, 1.0f, 0.1f)] float util)
-        {
-            _considerations.Clear();
-            var c = ConsiderationConstructor.WeightedMetrics("name", _considerations, 3.0f);
-            CustomContext context = new CustomContext();
-            context.BaseUtility = new Utility(util, 0.8f);
-            var b1 = new BasicConsideration("b1", _considerations);
-            var b2 = new BasicConsideration("b2", _considerations);
-            c.AddConsideration("b1");
-            c.AddConsideration("b2");
-            var cc = c.Clone() as ICompositeConsideration;
-
-            c.Consider(context);
-            cc.Consider(context);
-            Assert.AreEqual(c.Utility.Value, cc.Utility.Value);
-            Assert.AreEqual(c.Utility.Weight, cc.Utility.Weight);
-        }
-
         const float Tolerance = 1e-6f;
     }
 

@@ -27,11 +27,6 @@ namespace ExampleAI
     {
         public static readonly string Name = "Sleep";
 
-        public override IAction Clone()
-        {
-            return new SleepAction(this);
-        }
-
         protected override void OnExecute(CharacterContext context)
         {
             context.Character.Report(Name);

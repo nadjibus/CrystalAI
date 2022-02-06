@@ -50,20 +50,6 @@ namespace Crystal.ActionTests
         }
 
         [Test]
-        public void CloneTest()
-        {
-            _aiConstructor.AIs.ClearAll();
-            var b = new Behaviour("targetBehaviour", _aiConstructor.Behaviours);
-            var t = new BehaviourTransition("b", "targetBehaviour", _aiConstructor.Behaviours);
-            Assert.IsNotNull(t);
-            Assert.IsNotNull(t.Behaviour);
-            Assert.That(t.Behaviour.NameId, Is.EqualTo(b.NameId));
-            var tc = t.Clone();
-            Assert.IsNotNull(tc);
-            Assert.That(tc.NameId, Is.EqualTo(t.NameId));
-        }
-
-        [Test]
         public void TargetBehaviourNullExceptionTest()
         {
             Assert.Throws<BehaviourTransition.BehaviourNullException>(() => new BehaviourTransition(null));

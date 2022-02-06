@@ -29,6 +29,13 @@ namespace Crystal.BehaviourTests
             get { return _bval; }
             set { _bval = value.Clamp01(); }
         }
+
+        public ActionState CurrentActionState { get; }
+
+        public BehaviourContext()
+        {
+            CurrentActionState = new ActionState();
+        }
     }
 
     public class BehaviourConsideration : ConsiderationBase<BehaviourContext>

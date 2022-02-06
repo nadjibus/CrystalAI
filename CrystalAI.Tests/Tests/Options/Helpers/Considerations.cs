@@ -78,6 +78,14 @@ namespace Crystal.OptionTests
             get { return _xVal8; }
             set { _xVal8 = value.Clamp<float>(0.0f, 10.0f); }
         }
+
+
+        public ActionState CurrentActionState { get; }
+
+        public OptionContext()
+        {
+            CurrentActionState = new ActionState();
+        }
     }
 
     public class OptionConsideration1 : ConsiderationBase<OptionContext>

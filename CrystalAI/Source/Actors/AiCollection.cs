@@ -111,7 +111,7 @@ namespace Crystal
         /// <returns></returns>
         public IUtilityAi Create(string aiId)
         {
-            return _aiMap.ContainsKey(aiId) ? _aiMap[aiId].Clone() : null;
+            return _aiMap.ContainsKey(aiId) ? _aiMap[aiId] : null;
         }
 
         /// <summary>

@@ -107,39 +107,11 @@ namespace Crystal
         }
 
         /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns></returns>
-        public IUtilityAi Clone()
-        {
-            return new UtilityAi(this);
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="UtilityAi"/> class.
         /// </summary>
         public UtilityAi()
         {
             Initialize();
-        }
-
-        /// <summary>
-        /// Copy constructor.
-        /// </summary>
-        /// <param name="other">The other.</param>
-        UtilityAi(UtilityAi other)
-        {
-            NameId = other.NameId;
-            _collection = other._collection;
-            Initialize();
-            _selector = other._selector.Clone();
-
-            for (int i = 0; i < other._behaviours.Count; i++)
-            {
-                var b = other._behaviours[i].Clone() as Behaviour;
-                _behaviours.Add(b);
-                _behaviourUtilities.Add(b.Utility);
-            }
         }
 
         /// <summary>

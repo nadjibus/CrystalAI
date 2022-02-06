@@ -80,7 +80,7 @@ namespace Crystal
         /// <returns></returns>
         public IConsideration Create(string considerationId)
         {
-            return _considerationsMap.ContainsKey(considerationId) ? _considerationsMap[considerationId].Clone() : null;
+            return _considerationsMap.ContainsKey(considerationId) ? _considerationsMap[considerationId] : null;
         }
 
         /// <summary>

@@ -11,11 +11,6 @@ namespace ExampleAI
     {
         public static readonly string Name = "Read";
 
-        public override IAction Clone()
-        {
-            return new ReadAction(this);
-        }
-
         protected override void OnExecute(CharacterContext context)
         {
             context.Character.Report(Name);

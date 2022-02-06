@@ -37,19 +37,6 @@ namespace Crystal
         IUtilityAi _targetAi;
 
         /// <summary>
-        /// Creates a new instance of the implementing class. Note that the semantics here
-        /// are somewhat vague, however, by convention the "Prototype Pattern" uses a "Clone"
-        /// function. Note that this may have very different semantics when compared with either
-        /// shallow or deep cloning. When implementing this remember to include only the defining
-        /// characteristics of the class and not its state!
-        /// </summary>
-        /// <returns></returns>
-        public override IAction Clone()
-        {
-            return new AiTransition(this);
-        }
-
-        /// <summary>
         /// Triggers the action selection mechanism of the associated <see cref="T:Crystal.IBehaviour" /> or
         /// <see cref="T:Crystal.IUtilityAi" />.
         /// </summary>
@@ -78,16 +65,6 @@ namespace Crystal
                 throw new TargetAiNullException();
 
             _targetAi = ai;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AiTransition"/> class.
-        /// </summary>
-        /// <param name="other">The other.</param>
-        AiTransition(AiTransition other) : base(other)
-        {
-            _aiNameId = other._aiNameId;
-            _aiCollection = other._aiCollection;
         }
 
         /// <summary>

@@ -77,22 +77,9 @@ namespace Crystal
         /// <returns>The utility of this option.</returns>
         public override void Consider(IContext context)
         {
-            if (Action.InCooldown)
+            if (Action.InCooldown(context))
                 Utility = new Utility(0.0f, Weight);
             base.Consider(context);
-        }
-
-        /// <summary>
-        /// Creates a new instance of the implementing class. Note that the semantics here
-        /// are somewhat vague, however, by convention the "Prototype Pattern" uses a "Clone"
-        /// function. Note that this may have very different semantics when compared with either
-        /// shallow or deep cloning. When implementing this remember to include only the defining
-        /// characteristics of the class and not its state!
-        /// </summary>
-        /// <returns></returns>
-        public override IConsideration Clone()
-        {
-            return new Option(this);
         }
 
         /// <summary>
@@ -101,18 +88,6 @@ namespace Crystal
         public Option()
         {
             Initialize();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:Crystal.Option"/> class.
-        /// </summary>
-        /// <param name="other">The other.</param>
-        protected Option(Option other) : base(other)
-        {
-            _collection = other._collection;
-            Weight = other.Weight;
-            Measure = other.Measure?.Clone();
-            Action = other.Action?.Clone();
         }
 
         /// <summary>

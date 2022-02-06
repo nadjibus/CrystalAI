@@ -25,11 +25,6 @@ namespace CrystalAI.TestHelpers
 
     public class MockGenericAction : ActionBase<CustomContext>
     {
-        public override IAction Clone()
-        {
-            return new MockGenericAction(this);
-        }
-
         protected override void OnExecute(CustomContext context)
         {
             EndInSuccess(context);

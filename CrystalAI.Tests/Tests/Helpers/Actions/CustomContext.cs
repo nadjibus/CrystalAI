@@ -26,11 +26,18 @@ namespace CrystalAI.TestHelpers
 
     public class CustomContext : IContext
     {
+        public CustomContext()
+        {
+            CurrentActionState = new ActionState();
+        }
+
         public string Name;
         public string Description;
         public List<int> IntList = new List<int>();
 
         public Utility BaseUtility;
+
+        public ActionState CurrentActionState { get; }
     }
 
 }

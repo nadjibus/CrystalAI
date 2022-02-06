@@ -64,7 +64,6 @@ namespace Crystal.ActorTests
             _aIs.Add(ai);
             var newAi = _aIs.Create("some");
             Assert.AreEqual(ai.NameId, newAi.NameId);
-            Assert.AreNotEqual(ai, newAi);
         }
 
         [Test]

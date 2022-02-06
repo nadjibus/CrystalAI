@@ -33,11 +33,6 @@ namespace CrystalAI.TestHelpers
             get { return _currentIteration; }
         }
 
-        public override IAction Clone()
-        {
-            return new UpdatingAction(this);
-        }
-
         protected override void OnExecute(IContext context)
         {
             _currentIteration = 1;
@@ -57,11 +52,6 @@ namespace CrystalAI.TestHelpers
 
         public UpdatingAction()
         {
-        }
-
-        UpdatingAction(UpdatingAction other) : base(other)
-        {
-            MaxIterations = other.MaxIterations;
         }
 
         public UpdatingAction(int iterations)

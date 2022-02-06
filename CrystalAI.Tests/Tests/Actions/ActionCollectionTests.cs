@@ -56,9 +56,6 @@ namespace Crystal.ActionTests
             collection.Add(action);
             var newAction = collection.Create("someaction");
             Assert.AreEqual(action.NameId, newAction.NameId);
-            Assert.AreEqual(action.ActionStatus, newAction.ActionStatus);
-            Assert.AreEqual(action.InCooldown, newAction.InCooldown);
-            Assert.AreNotEqual(action, newAction);
         }
 
         [Test]

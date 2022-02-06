@@ -36,31 +36,12 @@ namespace Crystal
         }
 
         /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns></returns>
-        public override IConsideration Clone()
-        {
-            return new ConstantUtilityOption(this);
-        }
-
-        /// <summary>
         ///   Initializes a new instance of the <see cref="T:Crystal.ConstantUtilityOption"/> class.
         /// </summary>
         public ConstantUtilityOption()
         {
             Weight = 1.0f;
             DefaultUtility = new Utility(0.0f, Weight);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:Crystal.ConstantUtilityOption"/> class.
-        /// </summary>
-        /// <param name="other">The other.</param>
-        ConstantUtilityOption(ConstantUtilityOption other) : base(other)
-        {
-            Weight = other.Weight;
-            DefaultUtility = other.DefaultUtility;
         }
 
         /// <summary>

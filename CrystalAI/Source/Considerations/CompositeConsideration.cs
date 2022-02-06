@@ -162,19 +162,6 @@ namespace Crystal
         }
 
         /// <summary>
-        /// Creates a new instance of the implementing class. Note that the semantics here
-        /// are somewhat vague, however, by convention the "Prototype Pattern" uses a "Clone"
-        /// function. Note that this may have very different semantics when compared with either
-        /// shallow or deep cloning. When implementing this remember to include only the defining
-        /// characteristics of the class and not its state!
-        /// </summary>
-        /// <returns></returns>
-        public virtual IConsideration Clone()
-        {
-            return new CompositeConsideration(this);
-        }
-
-        /// <summary>
         ///   Initializes a new instance of the <see cref="T:Crystal.CompositeConsideration"/> class.
         /// </summary>
         public CompositeConsideration()
@@ -191,14 +178,14 @@ namespace Crystal
             CreateLists();
             NameId = other.NameId;
             _collection = other._collection;
-            _measure = other._measure.Clone();
+            _measure = other._measure;
             _defaultUtility = other._defaultUtility;
             Utility = other.Utility;
             Weight = other.Weight;
 
             for (int i = 0; i < other._considerations.Count; i++)
             {
-                _considerations.Add(other._considerations[i].Clone());
+                _considerations.Add(other._considerations[i]);
                 _considerationUtilities.Add(other._considerationUtilities[i]);
             }
         }

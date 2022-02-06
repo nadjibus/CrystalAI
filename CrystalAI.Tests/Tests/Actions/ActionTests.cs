@@ -120,16 +120,6 @@ namespace Crystal.ActionTests
                                                                                                                           collection));
         }
 
-        [Test, TestCaseSource("_cloneTestCases")]
-        public void CloneTests(IAction action)
-        {
-            var newAction = action.Clone();
-            Assert.AreEqual(action.NameId, newAction.NameId);
-            Assert.AreEqual(action.ActionStatus, newAction.ActionStatus);
-            Assert.AreEqual(action.InCooldown, newAction.InCooldown);
-            Assert.AreNotEqual(action, newAction);
-        }
-
         [Test]
         public void CreatingSameActionThrowsTest()
         {
@@ -145,30 +135,30 @@ namespace Crystal.ActionTests
         public void DoesActionRespectCooldownTest(IAction action, float cooldown)
         {
             int milliSeconds = (int)(1000 * cooldown) + 1;
-            action.Cooldown = cooldown;
+            action.CooldownTime = cooldown;
             action.Execute(_customContext);
-            Assert.AreEqual(ActionStatus.Success, action.ActionStatus);
+            Assert.AreEqual(ActionExecutionResult.Success, _customContext.CurrentActionState.ExecutionResult);
 
             action.Execute(_customContext);
-            Assert.AreEqual(ActionStatus.Failure, action.ActionStatus);
-            Assert.AreEqual(true, action.InCooldown);
+            Assert.AreEqual(ActionExecutionResult.Failure, _customContext.CurrentActionState.ExecutionResult);
+            Assert.AreEqual(true, action.InCooldown(_customContext));
 
             Thread.Sleep(milliSeconds);
-            Assert.AreEqual(false, action.InCooldown);
+            Assert.AreEqual(false, action.InCooldown(_customContext));
             action.Execute(_customContext);
-            Assert.AreEqual(ActionStatus.Success, action.ActionStatus);
-            Assert.AreEqual(true, action.InCooldown);
+            Assert.AreEqual(ActionExecutionResult.Success, _customContext.CurrentActionState.ExecutionResult);
+            Assert.AreEqual(true, action.InCooldown(_customContext));
         }
 
         [Test, TestCaseSource("_noCooldownActionTestCases")]
         public void NoCooldownNonGenericActionTest(IAction action)
         {
-            action.Cooldown = 0.0f;
+            action.CooldownTime = 0.0f;
             for (int i = 0; i < 10; i++)
             {
                 action.Execute(_customContext);
-                Assert.AreEqual(ActionStatus.Success, action.ActionStatus);
-                Assert.AreEqual(false, action.InCooldown);
+                Assert.AreEqual(ActionExecutionResult.Success, _customContext.CurrentActionState.ExecutionResult);
+                Assert.AreEqual(false, action.InCooldown(_customContext));
             }
         }
 
@@ -180,17 +170,17 @@ namespace Crystal.ActionTests
             {
                 counter++;
                 action.Execute(_customContext);
-            } while (action.ActionStatus == ActionStatus.Running);
+            } while (_customContext.CurrentActionState.ExecutionResult == ActionExecutionResult.Running);
 
             Assert.AreEqual(UpdateIterations, counter);
-            Assert.AreEqual(ActionStatus.Success, action.ActionStatus);
+            Assert.AreEqual(ActionExecutionResult.Success, _customContext.CurrentActionState.ExecutionResult);
         }
 
         [Test, TestCaseSource("_failingActionTestCases")]
         public void FailingActionTests(IAction action)
         {
             action.Execute(_customContext);
-            Assert.AreEqual(ActionStatus.Failure, action.ActionStatus);
+            Assert.AreEqual(ActionExecutionResult.Failure, _customContext.CurrentActionState.ExecutionResult);
         }
 
         [Test]

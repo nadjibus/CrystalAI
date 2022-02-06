@@ -32,8 +32,8 @@ namespace Crystal
     public class ActionBase<TContext> : IAction where TContext : class, IContext
     {
         readonly IActionCollection _collection;
+        readonly ITimeProvider _timeProvider;
         float _cooldown;
-        float _startedTime;
 
         /// <summary>
         ///   A unique identifier for this action.
@@ -41,47 +41,13 @@ namespace Crystal
         public string NameId { get; }
 
         /// <summary>
-        ///   The Time that this action has been running for since it has been started in seconds.
-        /// </summary>
-        public float ElapsedTime
-        {
-            get
-            {
-                if (ActionStatus == ActionStatus.Running)
-                    return CrTime.TotalSeconds - _startedTime;
-
-                return 0f;
-            }
-        }
-
-        /// <summary>
         ///   The required cool-down time, in seconds, needed before this action executes again.
         /// </summary>
-        public float Cooldown
+        public float CooldownTime
         {
             get { return _cooldown; }
             set { _cooldown = value.ClampToLowerBound(0.0f); }
         }
-
-        /// <summary>
-        ///   This returns true if the cool-down time for this action has not yet elapsed.
-        /// </summary>
-        public bool InCooldown
-        {
-            get
-            {
-                if (ActionStatus == ActionStatus.Running ||
-                   ActionStatus == ActionStatus.Idle)
-                    return false;
-
-                return CrTime.TotalSeconds - _startedTime < _cooldown;
-            }
-        }
-
-        /// <summary>
-        ///   Gets the action status.
-        /// </summary>
-        public ActionStatus ActionStatus { get; protected set; } = ActionStatus.Idle;
 
         /// <summary>
         ///   Executes the specified context.
@@ -89,28 +55,15 @@ namespace Crystal
         /// <param name="context">The context.</param>
         public void Execute(TContext context)
         {
-            if (CanExecute() == false)
+            if (!CanExecute(context))
                 return;
 
-            if (TryUpdate(context) == false)
-            {
-                _startedTime = CrTime.TotalSeconds;
-                ActionStatus = ActionStatus.Running;
-                OnExecute(context);
-            }
-        }
+            if (TryUpdate(context))
+                return;
 
-        /// <summary>
-        ///   Creates a new instance of the implementing class. Note that the semantics here
-        ///   are somewhat vague, however, by convention the "Prototype Pattern" uses a "Clone"
-        ///   function. Note that this may have very different semantics when compared with either
-        ///   shallow or deep cloning. When implementing this remember to include only the defining
-        ///   characteristics of the class and not its state!
-        /// </summary>
-        /// <returns></returns>
-        public virtual IAction Clone()
-        {
-            return new ActionBase<TContext>(this);
+            context.CurrentActionState.SetAction(this, _timeProvider.TotalSeconds);
+            context.CurrentActionState.SetExecutionResult(ActionExecutionResult.Running);
+            OnExecute(context);
         }
 
         /// <summary>
@@ -137,10 +90,10 @@ namespace Crystal
         /// <param name="context">The context.</param>
         protected void EndInSuccess(TContext context)
         {
-            if (ActionStatus != ActionStatus.Running)
+            if (context.CurrentActionState.ExecutionResult != ActionExecutionResult.Running)
                 return;
 
-            ActionStatus = ActionStatus.Success;
+            context.CurrentActionState.SetExecutionResult(ActionExecutionResult.Success);
             FinalizeAction(context);
         }
 
@@ -150,10 +103,10 @@ namespace Crystal
         /// <param name="context">The context.</param>
         protected void EndInFailure(TContext context)
         {
-            if (ActionStatus != ActionStatus.Running)
+            if (context.CurrentActionState.ExecutionResult != ActionExecutionResult.Running)
                 return;
 
-            ActionStatus = ActionStatus.Failure;
+            context.CurrentActionState.SetExecutionResult(ActionExecutionResult.Failure);
             FinalizeAction(context);
         }
 
@@ -187,18 +140,19 @@ namespace Crystal
         /// <summary>
         ///   Initializes a new instance of the <see cref="ActionBase{TContext}"/> class.
         /// </summary>
-        public ActionBase()
+        public ActionBase(ITimeProvider timeProvider = null)
         {
+            _timeProvider = timeProvider ?? CrTime.Instance;
         }
 
         /// <summary>
         ///   Initializes a new instance of the <see cref="ActionBase{TContext}"/> class.
         /// </summary>
         /// <param name="other">The other.</param>
-        protected ActionBase(ActionBase<TContext> other)
+        protected ActionBase(ActionBase<TContext> other) : this()
         {
             NameId = other.NameId;
-            Cooldown = other.Cooldown;
+            CooldownTime = other.CooldownTime;
             _collection = other._collection;
         }
 
@@ -209,7 +163,7 @@ namespace Crystal
         /// <param name="collection">The collection.</param>
         /// <exception cref="T:Crystal.ActionBase`1.NameIdEmptyOrNullException"></exception>
         /// <exception cref="T:Crystal.ActionBase`1.ActionCollectionNullException"></exception>
-        public ActionBase(string nameId, IActionCollection collection)
+        public ActionBase(string nameId, IActionCollection collection) : this()
         {
             if (string.IsNullOrEmpty(nameId))
                 throw new NameIdEmptyOrNullException();
@@ -226,11 +180,11 @@ namespace Crystal
             Execute((TContext)context);
         }
 
-        bool CanExecute()
+        bool CanExecute(TContext context)
         {
-            if (InCooldown)
+            if (InCooldown(context))
             {
-                ActionStatus = ActionStatus.Failure;
+                context.CurrentActionState.SetExecutionResult(ActionExecutionResult.Failure);
                 return false;
             }
 
@@ -239,7 +193,10 @@ namespace Crystal
 
         bool TryUpdate(TContext context)
         {
-            if (ActionStatus == ActionStatus.Running)
+            if (context.CurrentActionState?.Action != this)
+                return false;
+
+            if (context.CurrentActionState.ExecutionResult == ActionExecutionResult.Running)
             {
                 OnUpdate(context);
                 return true;
@@ -257,6 +214,24 @@ namespace Crystal
         {
             if (_collection.Add(this) == false)
                 throw new ActionAlreadyExistsInCollectionException(NameId);
+        }
+
+        bool IAction.InCooldown(IContext context)
+        {
+            return InCooldown((TContext)context);
+        }
+
+        public bool InCooldown(TContext context)
+        {
+            if (context.CurrentActionState?.Action != this)
+                return false;
+
+            var state = context.CurrentActionState;
+
+            if (state.ExecutionResult == ActionExecutionResult.Running || state.ExecutionResult == ActionExecutionResult.Idle)
+                return false;
+
+            return _timeProvider.TotalSeconds - state.StartedAt < _cooldown;
         }
 
         internal class NameIdEmptyOrNullException : Exception

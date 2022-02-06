@@ -25,21 +25,12 @@ namespace CrystalAI.TestHelpers
 
     public class MockAction : ActionBase
     {
-        public override IAction Clone()
-        {
-            return new MockAction(this);
-        }
-
         protected override void OnExecute(IContext context)
         {
             EndInSuccess(context);
         }
 
         public MockAction()
-        {
-        }
-
-        protected MockAction(MockAction other) : base(other)
         {
         }
 

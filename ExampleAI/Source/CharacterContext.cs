@@ -90,6 +90,8 @@ namespace ExampleAI
             set { _cleanliness = value.Clamp(0f, 100f); }
         }
 
+        public ActionState CurrentActionState { get; }
+
         public override string ToString()
         {
             return string.Format(
@@ -114,6 +116,7 @@ namespace ExampleAI
             _energy = 100f;
             _greed = 20f;
             Wealth = 1000f;
+            CurrentActionState = new ActionState();
         }
     }
 

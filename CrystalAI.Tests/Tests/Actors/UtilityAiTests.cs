@@ -40,6 +40,13 @@ namespace Crystal.ActorTests
             get { return _val2; }
             set { _val2 = value.Clamp01(); }
         }
+
+        public ActionState CurrentActionState { get; }
+
+        public UaiContext()
+        {
+            CurrentActionState = new ActionState();
+        }
     }
 
     [TestFixture]

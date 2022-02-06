@@ -217,7 +217,7 @@ namespace Crystal
 
         bool ActionStillRunning()
         {
-            return _currentAction?.ActionStatus == ActionStatus.Running;
+            return _currentContext?.CurrentActionState?.ExecutionResult == ActionExecutionResult.Running;
         }
 
         bool CouldNotUpdateContext()
@@ -258,7 +258,7 @@ namespace Crystal
                 return;
 
             _currentAction.Execute(_currentContext);
-            if (_currentAction.ActionStatus != ActionStatus.Running)
+            if (_currentContext?.CurrentActionState?.ExecutionResult != ActionExecutionResult.Running)
                 _currentAction = null;
         }
 

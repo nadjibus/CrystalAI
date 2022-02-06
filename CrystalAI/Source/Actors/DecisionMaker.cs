@@ -35,6 +35,7 @@ namespace Crystal
 
         DeferredCommand _updateCommand;
         IDeferredCommandHandle _updateCommandHandle;
+        private readonly ITimeProvider _timeProvider;
 
         /// <summary>
         /// Called after <see cref="M:Crystal.DecisionMakerBase.Start" />.
@@ -79,11 +80,13 @@ namespace Crystal
         /// <param name="contextProvider">The context provider.</param>
         /// <param name="aiScheduler">The ai scheduler.</param>
         /// <exception cref="Crystal.DecisionMaker.SchedulerNullException"></exception>
-        public DecisionMaker(IUtilityAi uai, IContextProvider contextProvider, IScheduler aiScheduler)
+        public DecisionMaker(IUtilityAi uai, IContextProvider contextProvider, IScheduler aiScheduler, ITimeProvider timeProvider = null)
           : base(uai, contextProvider)
         {
             if (aiScheduler == null)
                 throw new SchedulerNullException();
+
+            _timeProvider = timeProvider ?? CrTime.Instance;
 
             InitializeThinkCommand();
             InitializeUpdateCommand();
@@ -92,7 +95,7 @@ namespace Crystal
 
         void InitializeThinkCommand()
         {
-            _thinkCommand = new DeferredCommand(Think)
+            _thinkCommand = new DeferredCommand(Think, _timeProvider)
             {
                 InitExecutionDelayInterval = InitThinkDelay,
                 ExecutionDelayInterval = ThinkDelay
@@ -101,7 +104,7 @@ namespace Crystal
 
         void InitializeUpdateCommand()
         {
-            _updateCommand = new DeferredCommand(Update)
+            _updateCommand = new DeferredCommand(Update, _timeProvider)
             {
                 InitExecutionDelayInterval = InitUpdateDelay,
                 ExecutionDelayInterval = UpdateDelay
